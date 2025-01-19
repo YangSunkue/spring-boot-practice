@@ -21,6 +21,9 @@ public class FirstController {
         return "greetings";
     }
 
+    /**
+     * 작별 인사를 출력합니다.
+     */
     @GetMapping("/bye")
     public String seeYouNext(Model model) {
         model.addAttribute("username", "선규");
