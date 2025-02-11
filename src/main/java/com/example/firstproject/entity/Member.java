@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -12,6 +13,7 @@ import lombok.ToString;
  * Member 테이블과 연결됩니다.
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 public class Member {

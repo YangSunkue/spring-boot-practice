@@ -3,10 +3,13 @@ package com.example.firstproject.controller;
 import com.example.firstproject.dto.MemberForm;
 import com.example.firstproject.entity.Member;
 import com.example.firstproject.repository.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
@@ -45,5 +48,27 @@ public class MemberController {
         log.info(saved.toString());
 
         return "members/new";
+    }
+
+    @GetMapping("/members/{id}")
+    public String show(@PathVariable Long id, Model model) {
+
+        // 조회된 데이터가 없을 경우 예외 처리, 500 반환
+        Member memberEntity = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + id));
+        model.addAttribute("member", memberEntity);
+        return "members/show";
+    }
+
+    @GetMapping("/members")
+    public String index(Model model) {
+
+        // 데이터가 없을 경우 빈 컬렉션을 반환
+        // 빈 컬렉션은 정상적인 응답응로 간주하므로 예외 처리 필요 없음
+        // 만약 예외처리 한다면 뷰 단에서 하는 것이 바람직함
+        Iterable<Member> memberEntityList = memberRepository.findAll();
+
+        model.addAttribute("memberList", memberEntityList);
+        return "members/index";
     }
 }
