@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,35 @@ public class ArticleController {
 
         // 4. 수정 결과 페이지로 리다이렉트
         return "redirect:/articles/" + target.getId();
+    }
+
+    /**
+     * 게시글 삭제 api 입니다.
+     * HTML의 form은 delete 메소드를 제공하지 않으므로 GetMapping 사용
+     */
+    @GetMapping("/articles/{id}/delete")
+    @Transactional
+    public String delete(@PathVariable Long id, RedirectAttributes rttr) {
+
+        log.info("삭제 요청이 들어왔습니다!");
+
+        // 1. 삭제할 대상 가져오기
+        Article target = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("삭제할 %d번 데이터를 찾을 수 없습니다", id)
+                ));
+        log.info("삭제 대상 데이터 : " + target.toString());
+
+        // 2. 대상 엔티티 삭제하기
+        articleRepository.delete(target);
+
+        // 리다이렉트 시점에 한 번만 사용할 데이터 등록
+        // Model을 상속받는 객체라서 뷰 템플릿에서 사용 가능함
+        rttr.addFlashAttribute("msg", String.format("%d번 글이 삭제되었습니다!", id));
+
+
+        // 3. 결과 페이지로 리다이렉트
+        return "redirect:/articles";
     }
 
 
