@@ -4,6 +4,7 @@ import com.example.firstproject.dto.MemberForm;
 import com.example.firstproject.entity.Member;
 import com.example.firstproject.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,9 +48,12 @@ public class MemberController {
         Member saved = memberRepository.save(member);
         log.info(saved.toString());
 
-        return "members/new";
+        return "redirect:/members/" + saved.getId();
     }
 
+    /**
+     * 회원 상세 조회 페이지 입니다.
+     */
     @GetMapping("/members/{id}")
     public String show(@PathVariable Long id, Model model) {
 
@@ -59,6 +63,41 @@ public class MemberController {
         model.addAttribute("member", memberEntity);
         return "members/show";
     }
+
+    /**
+     * 회원 정보 수정 페이지 입니다.
+     */
+    @GetMapping("/members/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+
+        Member memberEntity = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + id));
+        model.addAttribute("member", memberEntity);
+
+        return "members/edit";
+    }
+
+    /**
+     * 회원 정보 수정 api 입니다.
+     */
+    @PostMapping("/members/update")
+    @Transactional
+    public String update(MemberForm form) {
+
+        log.info("수정 요청 데이터 : " + form.toString());
+
+        Member target = memberRepository.findById(form.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + form.getId()));
+        log.info("기존 데이터 : " + target.toString());
+
+        target.patch(form);
+        log.info("수정된 데이터 : " + target.toString());
+
+        return "redirect:/members/" + target.getId();
+    }
+
+
+
 
     @GetMapping("/members")
     public String index(Model model) {

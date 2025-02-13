@@ -3,6 +3,8 @@ package com.example.firstproject.controller;
 import com.example.firstproject.dto.ArticleForm;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,6 +61,42 @@ public class ArticleController {
         return "articles/index";
     }
 
+    /**
+     * 게시글 수정 페이지입니다.
+     */
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+
+        Article articleEntity = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Article not found with id: " + id));
+        model.addAttribute("article", articleEntity);
+        return "articles/edit";
+    }
+
+    /**
+     * 게시글 수정 기능 api입니다.
+     * @Transactional : 메서드 정상 종료 시 자동 커밋
+     * patch 메서드를 이용한 엔티티 값 변경, 그리고 jpa의 변경 감지 기능을 통한 DB 데이터 UPDATE
+     */
+    @PostMapping("/articles/update")
+    @Transactional
+    public String update(ArticleForm form) {
+        log.info(form.toString());
+
+        // 1. 기존 데이터 조회
+        Article target = articleRepository.findById(form.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Article not found with id: " + form.getId()));
+
+        // 2. 기존 엔티티 값 변경 ( update )
+        target.patch(form); // patch 메서드로 필요한 필드만 업데이트
+
+        // 3. 변경된 값 확인
+        log.info("Update article: " + target.toString());
+
+        // 4. 수정 결과 페이지로 리다이렉트
+        return "redirect:/articles/" + target.getId();
+    }
+
 
     /**
      * 게시글 생성 페이지입니다.
@@ -83,6 +121,6 @@ public class ArticleController {
         Article saved = articleRepository.save(article);
         log.info(saved.toString());
 
-        return "articles/new";
+        return "redirect:/articles/" + saved.getId();
     }
 }
