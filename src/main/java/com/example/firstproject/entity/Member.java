@@ -1,10 +1,12 @@
 package com.example.firstproject.entity;
 
+import com.example.firstproject.dto.MemberForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -14,6 +16,7 @@ import lombok.ToString;
  */
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @ToString
 @Entity
 public class Member {
@@ -25,4 +28,13 @@ public class Member {
     private String email;
     @Column
     private String password;
+
+    public void patch(MemberForm form) {
+        if (form.getEmail() != null) {
+            this.email = form.getEmail();
+        }
+        if (form.getPassword() != null) {
+            this.password = form.getPassword();
+        }
+    }
 }
