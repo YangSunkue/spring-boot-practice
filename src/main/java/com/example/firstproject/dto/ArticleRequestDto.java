@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class ArticleForm {
+public class ArticleRequestDto {
 
     private Long id; // id
     private String title; // 제목

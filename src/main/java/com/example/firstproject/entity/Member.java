@@ -1,6 +1,6 @@
 package com.example.firstproject.entity;
 
-import com.example.firstproject.dto.MemberForm;
+import com.example.firstproject.dto.MemberRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +29,7 @@ public class Member {
     @Column
     private String password;
 
-    public void patch(MemberForm form) {
+    public void patch(MemberRequestDto form) {
         if (form.getEmail() != null) {
             this.email = form.getEmail();
         }

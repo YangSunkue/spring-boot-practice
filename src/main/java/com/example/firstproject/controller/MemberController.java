@@ -1,6 +1,6 @@
 package com.example.firstproject.controller;
 
-import com.example.firstproject.dto.MemberForm;
+import com.example.firstproject.dto.MemberRequestDto;
 import com.example.firstproject.entity.Member;
 import com.example.firstproject.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,7 +37,7 @@ public class MemberController {
      * 회원 정보를 받아 DB에 저장합니다.
      */
     @PostMapping("/join")
-    public String newMember(MemberForm form) {
+    public String newMember(MemberRequestDto form) {
         // 0. 데이터를 DTO로 잘 받았는지 확인
         log.info(form.toString());
 
@@ -83,7 +83,7 @@ public class MemberController {
      */
     @PostMapping("/members/update")
     @Transactional
-    public String update(MemberForm form) {
+    public String update(MemberRequestDto form) {
 
         log.info("수정 요청 데이터 : " + form.toString());
 

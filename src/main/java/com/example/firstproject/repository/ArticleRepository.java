@@ -4,7 +4,6 @@ package com.example.firstproject.repository;
 import com.example.firstproject.entity.Article;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.ArrayList;
 
 /**
  * Article 엔티티의 리파지터리 입니다.

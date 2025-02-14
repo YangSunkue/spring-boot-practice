@@ -1,10 +1,7 @@
 package com.example.firstproject.entity;
 
-import com.example.firstproject.dto.ArticleForm;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.example.firstproject.dto.ArticleRequestDto;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +19,7 @@ import lombok.ToString;
 public class Article {
 
     @Id             // primary key
-    @GeneratedValue // autoincrement 어노테이션
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // autoincrement 어노테이션
     private Long id;
     @Column
     private String title;
@@ -35,7 +32,7 @@ public class Article {
     }
 
     // UPDATE 작업을 위한 엔티티 값 변경 (PATCH) 메서드
-    public void patch(ArticleForm form) {
+    public void patch(ArticleRequestDto form) {
         if (form.getTitle() != null) {
             this.title = form.getTitle();
         }

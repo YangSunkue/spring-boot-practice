@@ -1,6 +1,6 @@
 package com.example.firstproject.controller;
 
-import com.example.firstproject.dto.ArticleForm;
+import com.example.firstproject.dto.ArticleRequestDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -81,7 +78,7 @@ public class ArticleController {
      */
     @PostMapping("/articles/update")
     @Transactional
-    public String update(ArticleForm form) {
+    public String update(ArticleRequestDto form) {
         log.info(form.toString());
 
         // 1. 기존 데이터 조회
@@ -140,7 +137,7 @@ public class ArticleController {
      * 게시글을 생성합니다.
      */
     @PostMapping("/articles/create")
-    public String createArticle(ArticleForm form) {
+    public String createArticle(ArticleRequestDto form) {
         log.info(form.toString());
 
         // 1. DTO를 엔티티로 변환
