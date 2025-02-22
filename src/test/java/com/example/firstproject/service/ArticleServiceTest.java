@@ -89,15 +89,19 @@ class ArticleServiceTest {
 
         // given
         Long id = 1L;
-        ArticleRequestDto dto = new ArticleRequestDto(id, "새로운 제목", "새로운 내용");
+        String newTitle = "새로운 제목";
+        String newContent = "새로운 내용";
+        ArticleRequestDto dto = new ArticleRequestDto(id, newTitle, newContent);
+        Article expected = new Article(id, newTitle, newContent);
 
         // when
         articleService.update(id, dto);
 
         // then
-        Article updated = articleRepository.findById(id).orElse(null);
-        assertThat(updated.getTitle()).isEqualTo("새로운 제목");
-        assertThat(updated.getContent()).isEqualTo("새로운 내용");
+        Article updated = articleRepository.findById(id).get();
+        assertThat(updated)
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     @Test
