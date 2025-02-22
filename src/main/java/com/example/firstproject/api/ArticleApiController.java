@@ -1,11 +1,11 @@
 package com.example.firstproject.api;
 
+import com.example.firstproject.constant.ArticleResponseMessage;
 import com.example.firstproject.dto.ApiResponseDto;
 import com.example.firstproject.dto.ArticleRequestDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.service.ArticleService;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,21 +30,33 @@ public class ArticleApiController {
     // 모든 게시글 조회
     @GetMapping("/api/articles")
     public ApiResponseDto<List<Article>> index() {
-        return articleService.index();
+
+        List<Article> articles = articleService.index();
+
+        return ApiResponseDto.of(ArticleResponseMessage.ARTICLES_RETRIEVED, articles);
     }
 
     // 단일 게시글 조회
     @GetMapping("/api/articles/{id}")
     public ApiResponseDto<Article> show(@PathVariable Long id) {
-        return articleService.show(id);
+
+        Article article = articleService.show(id);
+
+        return ApiResponseDto.of(ArticleResponseMessage.ARTICLE_RETRIEVED, article);
     }
 
     // 게시글 생성
     @PostMapping("/api/articles")
     public ResponseEntity<ApiResponseDto<Article>> create(@RequestBody ArticleRequestDto dto) {
 
-        ApiResponseDto<Article> response = articleService.create(dto);
-        Article created = response.getData();
+        // 게시글 생성
+        Article created = articleService.create(dto);
+
+        // 응답 형태로 변환
+        ApiResponseDto<Article> response = ApiResponseDto.of(
+                ArticleResponseMessage.ARTICLE_CREATED,
+                created
+        );
 
         // URI는 헤더의 Location에 포함되어 응답된다.
         // REST 규약 준수 : 생성된 리소스의 경로를 포함하는 것은 RestAPI 아키텍처 권장사항이다.
@@ -60,13 +72,18 @@ public class ArticleApiController {
             @PathVariable Long id,
             @RequestBody ArticleRequestDto dto
     ) {
-        return articleService.update(id, dto);
+        Article target = articleService.update(id, dto);
+
+        return ApiResponseDto.of(ArticleResponseMessage.ARTICLE_UPDATED, target);
     }
 
     // 게시글 삭제
     @DeleteMapping("/api/articles/{id}")
     public ApiResponseDto<Article> delete(@PathVariable Long id) {
-        return articleService.delete(id);
+
+        Article target = articleService.delete(id);
+
+        return ApiResponseDto.of(ArticleResponseMessage.ARTICLE_DELETED, target);
     }
 
     /**
@@ -76,6 +93,8 @@ public class ArticleApiController {
     public ApiResponseDto<List<Article>> transactionTest(
             @RequestBody List<ArticleRequestDto> dtos
     ) {
-        return articleService.createArticles(dtos);
+        List<Article> savedArticles = articleService.createArticles(dtos);
+
+        return ApiResponseDto.of("저장 완료", savedArticles);
     }
 }

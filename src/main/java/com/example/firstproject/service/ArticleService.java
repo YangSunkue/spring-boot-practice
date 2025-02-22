@@ -28,41 +28,35 @@ public class ArticleService {
     /**
      * 모든 게시글을 조회합니다.
      */
-    public ApiResponseDto<List<Article>> index() {
-
-        List<Article> articleList = articleRepository.findAll();
-
-        return ApiResponseDto.of("Articles successfully retrieved", articleList);
+    public List<Article> index() {
+        return articleRepository.findAll();
     }
 
     /**
      * 단일 게시글을 조회합니다.
      */
-    public ApiResponseDto<Article> show(Long id) {
-
-        Article article = articleRepository.findById(id)
+    public Article show(Long id) {
+        return articleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Article", id));
-
-        return ApiResponseDto.of("Article successfully retrieved", article);
     }
 
     /**
      * 게시글을 생성합니다.
      */
     @Transactional
-    public ApiResponseDto<Article> create(ArticleRequestDto dto) {
+    public Article create(ArticleRequestDto dto) {
 
         Article article = dto.toEntity();
         Article saved = articleRepository.save(article);
 
-        return ApiResponseDto.of("Article successfully created", saved);
+        return saved;
     }
 
     /**
      * 게시글을 수정합니다.
      */
     @Transactional
-    public ApiResponseDto<Article> update(Long id, ArticleRequestDto dto) {
+    public Article update(Long id, ArticleRequestDto dto) {
 
         Article target = articleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Article", id)); // 커스텀 예외 적용
@@ -71,14 +65,14 @@ public class ArticleService {
         target.patch(dto);
         log.info("UPDATE 결과 데이터 : {}", target);
 
-        return ApiResponseDto.of("Article successfully updated", target);
+        return target;
     }
 
     /**
      * 게시글을 삭제합니다.
      */
     @Transactional
-    public ApiResponseDto<Article> delete(Long id) {
+    public Article delete(Long id) {
 
         Article target = articleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Article", id));
@@ -86,12 +80,12 @@ public class ArticleService {
 
         articleRepository.delete(target);
 
-        return ApiResponseDto.of("Article successfully deleted", target);
+        return target;
     }
 
 
     @Transactional
-    public ApiResponseDto<List<Article>> createArticles(List<ArticleRequestDto> dtos) {
+    public List<Article> createArticles(List<ArticleRequestDto> dtos) {
 
         // 1. dto 묶음을 엔티티 묶음으로 변환
         List<Article> articleList = dtos.stream()
@@ -99,8 +93,6 @@ public class ArticleService {
                 .collect(Collectors.toList());
 
         // 2. 엔티티 묶음을 DB에 저장
-//        articleList.stream()
-//                .forEach(article -> articleRepository.save(article)); // 이건 다른 작업도 추가로 할 때 사용
         List<Article> savedArticles = articleRepository.saveAll(articleList); // 이게 더 효율적이다.
 
         // 3. 강제 예외 발생시키기
@@ -108,7 +100,7 @@ public class ArticleService {
                 .orElseThrow(() -> new NotFoundException("Article", -1L));
 
         // 4. 결과 값 반환하기
-        return ApiResponseDto.of("저장 완료", savedArticles);
+        return savedArticles;
     }
 }
 
