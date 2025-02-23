@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 /**
  * 에러 로그를 출력하는 서비스입니다.
  */
-@Slf4j
 @Service
+@Slf4j
 public class ErrorLogService {
     public void logError(Exception e, HttpServletRequest request) {
         log.error("Exception occurred: {} at URI: {}",

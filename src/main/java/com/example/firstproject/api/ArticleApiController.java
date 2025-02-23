@@ -24,8 +24,11 @@ import java.util.List;
 @ResponseStatus(HttpStatus.OK)
 public class ArticleApiController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
+
+    public ArticleApiController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     // 모든 게시글 조회
     @GetMapping("/api/articles")

@@ -7,7 +7,6 @@ import com.example.firstproject.exception.NotFoundException;
 import com.example.firstproject.repository.ArticleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +21,12 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true) // 읽기 전용 기본값 설정
 public class ArticleService {
 
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
+
+    public ArticleService(ArticleRepository articleRepository) {
+        this.articleRepository = articleRepository;
+    }
+
 
     /**
      * 모든 게시글을 조회합니다.

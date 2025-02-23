@@ -14,11 +14,11 @@ import lombok.ToString;
  * 엔티티 클래스입니다.
  * Member 테이블과 연결됩니다.
  */
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @ToString
-@Entity
+@Getter
 public class Member {
 
     @Id

@@ -17,8 +17,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * 회원가입 관련 컨트롤러 입니다.
  */
-@Slf4j
 @Controller
+@Slf4j
 public class MemberController {
 
     @Autowired

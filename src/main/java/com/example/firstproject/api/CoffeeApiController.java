@@ -16,13 +16,16 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-@Slf4j
-@ResponseStatus(HttpStatus.OK)
 @RestController
+@ResponseStatus(HttpStatus.OK)
+@Slf4j
 public class CoffeeApiController {
 
-    @Autowired
-    private CoffeeService coffeeService;
+    private final CoffeeService coffeeService;
+
+    public CoffeeApiController(CoffeeService coffeeService) {
+        this.coffeeService = coffeeService;
+    }
 
     /**
      * 모든 커피 목록을 조회합니다.

@@ -11,10 +11,10 @@ import lombok.ToString;
  * 엔티티 클래스입니다.
  * DB의 테이블과 연결됩니다.
  */
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 @Getter
 public class Article {
 
