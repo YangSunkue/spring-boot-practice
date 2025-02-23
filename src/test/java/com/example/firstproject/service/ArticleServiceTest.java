@@ -4,6 +4,7 @@ import com.example.firstproject.dto.ArticleRequestDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.exception.NotFoundException;
 import com.example.firstproject.repository.ArticleRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,13 +33,17 @@ class ArticleServiceTest {
     ArticleRepository articleRepository;
 
     @Test
-    void index_모든_게시글을_성공적으로_조회한다() {
+    @DisplayName("모든 게시글을 성공적으로 조회합니다.")
+    void showArticlesSuccess() {
 
         // given
         Article a = new Article(1L, "가가가가", "1111");
         Article b = new Article(2L, "나나나나", "2222");
         Article c = new Article(3L, "다다다다", "3333");
-        List<Article> expected = List.of(a, b, c);
+        Article d = new Article(4L, "당신의 인생 영화는?", "댓글 고");
+        Article e = new Article(5L, "당신의 소울 푸드는?", "댓글 고고");
+        Article f = new Article(6L, "당신의 취미는?", "댓글 고고고");
+        List<Article> expected = List.of(a, b, c, d, e, f);
 
         // when
         List<Article> articles = articleService.index();
@@ -50,7 +55,8 @@ class ArticleServiceTest {
     }
 
     @Test
-    void show_단일_게시글을_성공적으로_조회한다() {
+    @DisplayName("단일 게시글을 성공적으로 조회합니다.")
+    void showArticleSuccess() {
 
         // given
         Long id = 1L;
@@ -66,12 +72,13 @@ class ArticleServiceTest {
     }
 
     @Test
-    void create_단일_게시글을_성공적으로_생성한다() {
+    @DisplayName("단일 게시글을 성공적으로 생성합니다.")
+    void createArticleSuccess() {
 
         // given
         String title = "라라라라";
         String content = "4444";
-        Article expected = new Article(4L, title, content);
+        Article expected = new Article(7L, title, content);
         ArticleRequestDto dto = new ArticleRequestDto(null, title, content);
 
         // when
@@ -85,7 +92,8 @@ class ArticleServiceTest {
 
 
     @Test
-    void update_단일_게시글을_성공적으로_수정한다() {
+    @DisplayName("단일 게시글을 성공적으로 수정합니다.")
+    void updateArticleSuccess() {
 
         // given
         Long id = 1L;
@@ -105,7 +113,8 @@ class ArticleServiceTest {
     }
 
     @Test
-    void delete_단일_게시글을_성공적으로_삭제한다() {
+    @DisplayName("단일 게시글을 성공적으로 삭제합니다.")
+    void deleteArticleSuccess() {
 
         // given
         Long id = 1L;
@@ -122,7 +131,8 @@ class ArticleServiceTest {
     }
 
     @Test
-    void delete_존재하지_않는_게시글_삭제시도하면_404_예외발생() {
+    @DisplayName("존재하지 않는 게시글을 삭제 시도하면 404 예외가 발생합니다.")
+    void deleteArticleThrowsNotFoundException() {
 
         // given
         Long nonExistentId = -1L;

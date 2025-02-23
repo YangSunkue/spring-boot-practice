@@ -20,8 +20,11 @@ import java.util.List;
 @Service
 public class CoffeeService {
 
-    @Autowired
-    private CoffeeRepository coffeeRepository;
+    private final CoffeeRepository coffeeRepository;
+
+    public CoffeeService(CoffeeRepository coffeeRepository) {
+        this.coffeeRepository = coffeeRepository;
+    }
 
     /**
      * 모든 커피 목록을 조회합니다.
