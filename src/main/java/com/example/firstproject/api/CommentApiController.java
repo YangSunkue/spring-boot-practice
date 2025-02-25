@@ -56,11 +56,47 @@ public class CommentApiController {
     /**
      * 댓글을 수정합니다.
      */
+    @PatchMapping("/api/comments/{id}")
+    public ApiResponseDto<CommentDto> updateComment(
+            @PathVariable Long id,
+            @RequestBody CommentDto dto
+    ) {
+        CommentDto updated = commentService.updateComment(id, dto);
+
+        return ApiResponseDto.of(CommentResponseMessage.COMMENT_UPDATED, updated);
+    }
 
 
     /**
      * 댓글을 삭제합니다.
      */
+    @DeleteMapping("/api/comments/{id}")
+    public ApiResponseDto<CommentDto> deleteComment(@PathVariable Long id) {
+
+        CommentDto deleted = commentService.deleteComment(id);
+
+        return ApiResponseDto.of(CommentResponseMessage.COMMENT_DELETED, deleted);
+    }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

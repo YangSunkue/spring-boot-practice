@@ -1,10 +1,13 @@
 package com.example.firstproject.controller;
 
 import com.example.firstproject.dto.ArticleRequestDto;
+import com.example.firstproject.dto.CommentDto;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import com.example.firstproject.service.CommentService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,16 +17,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 
 /**
  * 게시글 관련 컨트롤러 입니다.
  */
 @Controller
+@RequiredArgsConstructor
 @Slf4j
 public class ArticleController {
 
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
+    private final CommentService commentService;
 
     /**
      * 게시글 조회 페이지입니다.
@@ -34,9 +40,12 @@ public class ArticleController {
 
         // 1. id를 조회해 데이터 가져오기
         Article articleEntity = articleRepository.findById(id).orElse(null);
+        List<CommentDto> commentDtos = commentService.findCommentsByArticleId(id);
+
 
         // 2. 모델에 데이터 등록하기
         model.addAttribute("article", articleEntity);
+        model.addAttribute("commentDtos", commentDtos);
 
         // 3. 뷰 페이지 반환하기
         return "articles/show";
@@ -150,4 +159,16 @@ public class ArticleController {
 
         return "redirect:/articles/" + saved.getId();
     }
+
+    /**
+     * Group group = groupService.findById(groupId) , 예외처리
+     *
+     * List<TeamDto> teamDtos = teamService.findTeamByGroupId(groupId);
+     *
+     * model.addattribute("groupname", group.getName());
+     * model.addattribute("teamDtoList", teamDtos);
+     *
+     * return "groups/show";
+     *
+     */
 }

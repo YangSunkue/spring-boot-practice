@@ -31,7 +31,7 @@ public class CommentService {
         List<Comment> comments = commentRepository.findByArticleId(id);
 
         return comments.stream()
-                .map(CommentDto::from)
+                .map(CommentDto::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -52,10 +52,60 @@ public class CommentService {
         Comment saved = commentRepository.save(commentEntity);
 
         // 저장한 거 dto로 다시 변환
-        CommentDto savedDto = CommentDto.from(saved);
+        CommentDto savedDto = CommentDto.toDto(saved);
 
         // 리턴
         return savedDto;
     }
 
+    /**
+     * 댓글을 수정합니다.
+     */
+    @Transactional
+    public CommentDto updateComment(Long id, CommentDto dto) {
+
+        // 수정할 댓글 찾기
+        Comment target = commentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Comment", id));
+
+        // 댓글 수정
+        target.patch(dto);
+
+        // dto 형태로 변환
+        CommentDto targetDto = CommentDto.toDto(target);
+
+        // 리턴
+        return targetDto;
+    }
+
+    @Transactional
+    public CommentDto deleteComment(Long id) {
+
+        // 수정할 댓글 찾기
+        Comment target = commentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Comment", id));
+
+        // 댓글 삭제
+        commentRepository.delete(target);
+
+        // dto로 변환
+        CommentDto targetDto = CommentDto.toDto(target);
+
+        // 리턴
+        return targetDto;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
