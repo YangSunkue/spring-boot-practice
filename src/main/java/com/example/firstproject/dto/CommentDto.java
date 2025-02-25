@@ -21,7 +21,7 @@ public class CommentDto {
     /**
      * Comment 객체를 dto 형태로 변환합니다.
      */
-    public static CommentDto from(Comment comment) {
+    public static CommentDto toDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
                 comment.getArticle().getId(),

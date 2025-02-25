@@ -1,5 +1,6 @@
 package com.example.firstproject.entity;
 
+import com.example.firstproject.dto.CommentDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,4 +31,12 @@ public class Comment {
     @Column
     private String body;
 
+    public void patch(CommentDto dto) {
+        if (dto.getNickname() != null && !dto.getNickname().isEmpty()) {
+            this.nickname = dto.getNickname();
+        }
+        if (dto.getBody() != null && !dto.getBody().isEmpty()) {
+            this.body = dto.getBody();
+        }
+    }
 }
