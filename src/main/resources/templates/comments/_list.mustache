@@ -13,6 +13,10 @@
                         data-bs-body="{{body}}"
                         data-bs-article-id="{{articleId}}">
                         수정</button>
+                <!-- 댓글 삭제 버튼 -->
+                <button type="button"
+                class="btn btn-sm btn-outline-danger comment-delete-btn"
+                data-comment-id="{{id}}">삭제</button>
             </div>
             <div class="card-body">
                 {{body}}
@@ -108,6 +112,45 @@
 
             // 새로 고침
             window.location.reload();
+        });
+    });
+}
+{
+    // 삭제 버튼 가져오기
+    const commentDeleteBtns = document.querySelectorAll(".comment-delete-btn");
+
+    // 삭제 버튼 이벤트 처리
+    // commentDeleteBtns.addEventListener("click", function() {
+    //     console.log("삭제 버튼이 클릭됐습니다..!");
+    // });
+
+    commentDeleteBtns.forEach(btn => {
+        btn.addEventListener("click", (event) => {
+
+            // 이벤트 발생 요소 선택
+            const commentDeleteBtn = event.target;
+
+            // 삭제 댓글 id 가져오기
+            const commentId = commentDeleteBtn.getAttribute("data-comment-id");
+
+            // 삭제 REST API 호출
+            const url = `/api/comments/${commentId}`;
+            fetch(url, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                // 실패 시 메시지 출력
+                if(!response.ok) {
+                    alert("댓글 삭제 실패..!");
+                    return;
+                }
+
+                // 성공 시 메시지 출력
+                alert("댓글 삭제 성공..!");
+                window.location.reload();
+            })
         });
     });
 }
